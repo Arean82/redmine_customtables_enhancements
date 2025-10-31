@@ -1,4 +1,4 @@
-class CreateCustomTableEnhancements < ActiveRecord::Migration[6.1]
+class CreateCustomTableEnhancements < ActiveRecord::Migration[4.2]
   def change
     create_table :custom_table_enhancements do |t|
       t.integer :custom_table_id, null: false
