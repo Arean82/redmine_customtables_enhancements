@@ -1,6 +1,8 @@
 
 require 'redmine'
-require_dependency 'redmine_customtables_enhancements'
+#require_dependency 'redmine_customtables_enhancements'
+require_relative 'lib/redmine_customtables_enhancements'
+
 
 Redmine::Plugin.register :redmine_customtables_enhancements do
   name 'Redmine CustomTables Enhancements'
