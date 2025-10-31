@@ -1,41 +1,37 @@
-# Redmine CustomTables Enhancements
+# redmine_customtables_enhancements
 
-This plugin extends the `redmine_custom_tables` plugin with:
-- Auto-capture of user and date for entries
-- Auto-fill of fields from previous records
-- Popup display of forms in issue view
-- Journal updates when forms are modified
 
-### Installation
+Plugin that extends redmine_custom_tables by:
+- popup UI from issue view
+- auto-capture author/date
+- auto-copy selected fields to new entries and lock them
+- mirror create/update/delete to the parent issue's journals
+- fine-grained permissions (add/edit/delete)
 
+
+## Installation
+
+
+1. Ensure `redmine_custom_tables` plugin is installed and migrated.
+2. Copy this plugin into `REDMINE_ROOT/plugins`.
+3. Run:
 ```bash
-cd /data/redmine/plugins
-git clone https://github.com/Arean82/redmine_customtables_enhancements.git
-bundle install
+bundle install --without development test
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-systemctl restart redmine
-````
-
-### Configuration
-
-* Ensure `redmine_custom_tables` plugin is installed and active.
-* Add your custom table(s) to projects.
-* Edit `customtables_auto_fill.js` to list fields you want auto-populated.
-
-### Compatibility
-
-* Redmine 5.x+
-* Works with PostgreSQL and MySQL
+systemctl restart redmine # or restart passenger/unicorn/puma
+```
+4. Go to **Administration → Roles and permissions** and grant the following permissions (under module 'Custom tables') as needed:
+- View custom tables (existing permission)
+- Add entries to custom tables
+- Edit custom table entries
+- Delete custom table entries
 
 
-## After Installing
+## Configuration
+- Open `assets/javascripts/customtables_auto_fill.js` and edit `fieldsToCopy` to match the form field names you want to persist from previous row.
+- If you want the read-only style changed, add CSS to your Redmine stylesheet or in the plugin views.
 
-1. Go to your issue view → “Open Form” button appears.  
-2. Popup shows your project’s custom tables (like your renewal form).  
-3. Each record automatically captures:
-   - `author` = logged-in user  
-   - `created_on` = timestamp  
-4. When adding new record:
-   - Certain fields (defined in JS) auto-fill from last row  
-   - Those fields become read-only  
-5. Journal entry is created in the issue history.
+
+## Notes
+- UI-level hiding of buttons is best-effort; the controller patch enforces permissions on backend.
+- If your redmine_custom_tables plugin uses different controller/class names, adjust the controller patch accordingly.

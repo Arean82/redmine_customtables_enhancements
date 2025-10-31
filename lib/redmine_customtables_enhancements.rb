@@ -2,4 +2,6 @@ module RedmineCustomtablesEnhancements
 end
 
 require_dependency 'redmine_customtables_enhancements/custom_entity_patch'
+require_dependency 'redmine_customtables_enhancements/controller_patch'
 require_dependency 'redmine_customtables_enhancements/hooks/view_issues_show_details_bottom_hook'
+

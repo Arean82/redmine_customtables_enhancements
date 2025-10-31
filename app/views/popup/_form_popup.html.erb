@@ -1,22 +1,40 @@
-# Partial for rendering a popup with custom forms related to an issue
+<% project = @issue.project if defined?(@issue) %>
+<% can_add = project && User.current.allowed_to?(:add_custom_table_entries, project) %>
+<% can_edit = project && User.current.allowed_to?(:edit_custom_table_entries, project) %>
+<% can_delete = project && User.current.allowed_to?(:delete_custom_table_entries, project) %>
 
-<div id="custom-form-popup" style="display:none; background:#fff; border:1px solid #ccc; padding:10px;">
+<div id="custom-form-popup" style="display:none; background:#fff; border:1px solid #ccc; padding:10px; max-width: 100%;">
   <h3><%= l(:label_custom_form_popup) %></h3>
+
   <% if @issue && @issue.custom_tables.any? %>
     <% @issue.custom_tables.each do |table| %>
-      <iframe src="<%= custom_table_path(table_id: table.id, issue_id: @issue.id) %>" 
-              width="100%" height="400" style="border:none;"></iframe>
+      <div class="custom-table-embed">
+        <h4><%= table.name %></h4>
+        <%# render as iframe to keep the custom_tables UI intact and sandboxed %>
+        <iframe src="<%= url_for(controller: 'custom_tables/custom_entities', action: 'index', table_id: table.id, issue_id: @issue.id) %>"
+                width="100%" height="380" style="border:1px solid #ddd;"></iframe>
+      </div>
     <% end %>
   <% else %>
     <p><em>No forms defined for this project.</em></p>
   <% end %>
+
+  <div style="margin-top:8px;">
+    <% if can_add || can_edit || can_delete %>
+      <%= link_to l(:button_open_form_popup), '#', id: 'open-form-btn', class: 'icon icon-edit' %>
+    <% else %>
+      <p><em>You don\'t have permission to modify forms in this project.</em></p>
+    <% end %>
+  </div>
 </div>
 
-<%= link_to l(:button_open_form_popup), '#', id: 'open-form-btn', class: 'icon icon-edit' %>
-
 <script>
-document.getElementById('open-form-btn').onclick = function() {
-  const popup = document.getElementById('custom-form-popup');
-  popup.style.display = (popup.style.display === 'none') ? 'block' : 'none';
-};
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('open-form-btn');
+  if(btn) btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    var popup = document.getElementById('custom-form-popup');
+    popup.style.display = (popup.style.display === 'none') ? 'block' : 'none';
+  });
+});
 </script>

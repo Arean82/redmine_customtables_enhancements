@@ -1,3 +1,6 @@
 en:
   label_custom_form_popup: "Project Form"
   button_open_form_popup: "Open Form"
+  permission_add_custom_table_entries: "Add entries to custom tables"
+  permission_edit_custom_table_entries: "Edit custom table entries"
+  permission_delete_custom_table_entries: "Delete custom table entries"
