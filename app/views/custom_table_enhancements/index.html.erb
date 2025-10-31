@@ -1,0 +1,24 @@
+<h2>Custom Table Enhancements</h2>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th>Table Name</th>
+      <th>Fields</th>
+      <th>Configured</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tables.each do |table| %>
+      <% enh = CustomTableEnhancement.find_by(custom_table_id: table.id) %>
+      <tr>
+        <td><%= table.name %></td>
+        <td><%= table.custom_fields.map(&:name).join(', ') %></td>
+        <td><%= enh ? 'Yes' : 'No' %></td>
+        <td><%= link_to 'Configure', edit_custom_table_enhancement_path(table) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

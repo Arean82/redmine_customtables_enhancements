@@ -1,0 +1,25 @@
+<h2>Configure Enhancements for <%= @table.name %></h2>
+
+<%= form_for @enhancement, url: custom_table_enhancement_path(@table) do |f| %>
+  <p>
+    <%= f.check_box :enable_journaling %> 
+    <%= f.label :enable_journaling, "Mirror changes to issue history" %>
+  </p>
+
+  <p>
+    <%= f.check_box :capture_author_date %> 
+    <%= f.label :capture_author_date, "Auto-capture author and date" %>
+  </p>
+
+  <p>
+    <%= f.label :auto_populate_fields, "Fields to auto-populate from previous record" %><br>
+    <%= f.select :auto_populate_fields, options_for_select(@table.custom_fields.map { |f| [f.name, f.name] }, @enhancement.auto_populate_fields), {}, multiple: true, size: 5 %>
+  </p>
+
+  <p>
+    <%= f.label :read_only_fields, "Fields to make read-only in new entry" %><br>
+    <%= f.select :read_only_fields, options_for_select(@table.custom_fields.map { |f| [f.name, f.name] }, @enhancement.read_only_fields), {}, multiple: true, size: 5 %>
+  </p>
+
+  <%= f.submit 'Save', class: 'button' %>
+<% end %>
