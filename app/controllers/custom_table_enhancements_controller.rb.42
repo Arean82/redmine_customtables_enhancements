@@ -1,9 +1,8 @@
 #custom_table_enhancements_controller.rb
-# frozen_string_literal: true
 
 class CustomTableEnhancementsController < ApplicationController
   layout 'admin'
-  before_action :require_admin
+  before_filter :require_admin
 
   def index
     @tables = CustomTables::CustomTable.all.includes(:custom_fields)
@@ -17,7 +16,7 @@ class CustomTableEnhancementsController < ApplicationController
   def update
     @table = CustomTables::CustomTable.find(params[:id])
     @enhancement = CustomTableEnhancement.find_or_initialize_by(custom_table_id: @table.id)
-    if @enhancement.update(enhancement_params)
+    if @enhancement.update_attributes(enhancement_params)
       flash[:notice] = l(:notice_successful_update)
       redirect_to action: :index
     else
@@ -45,8 +44,7 @@ class CustomTableEnhancementsController < ApplicationController
 
   def enhancement_params
     params.require(:custom_table_enhancement).permit(
-      auto_populate_fields: [], read_only_fields: [],
-      :enable_journaling, :capture_author_date
+      { auto_populate_fields: [] }, { read_only_fields: [] }, :enable_journaling, :capture_author_date
     )
   end
 end
